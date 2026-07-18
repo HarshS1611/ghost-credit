@@ -36,22 +36,25 @@ ghost-credit/
 └── docker-compose.yml           # Local proof server
 ```
 
-## Setup (run locally — this needs the real Midnight toolchain, which isn't reachable
-## from this sandbox)
+## Setup
 
 1. Install the Compact toolchain (compiler + proof server):
-   https://docs.midnight.network/getting-started (Install the toolchain guide)
+   ```
+   curl --proto '=https' --tlsv1.2 -LsSf https://github.com/midnightntwrk/compact/releases/latest/download/compact-installer.sh | sh
+   compact update
+   ```
+   (see https://docs.midnight.network/getting-started/installation for details)
 
 2. Install deps:
    ```
-   cd contracts && yarn install
-   cd ../frontend && yarn install
+   cd contracts && npm install
+   cd ../frontend && npm install
    ```
 
 3. Compile the contract:
    ```
    cd contracts
-   compact compile src/ghost-credit.compact src/managed/ghost-credit
+   npm run build
    ```
 
 4. Start the proof server (needed before any deploy/interact call):
@@ -66,7 +69,7 @@ ghost-credit/
 
 6. Run the frontend:
    ```
-   cd frontend && yarn dev
+   cd frontend && npm run dev
    ```
 
 ## Demo script (3 min)
@@ -80,6 +83,6 @@ ghost-credit/
 ## Status
 
 - [x] Compile `ghost-credit.compact` with real toolchain and fix any compiler errors
-- [ ] Wire witnesses to real wallet-history inputs (currently mocked)
-- [ ] Deploy to Preprod, then mainnet if time allows
-- [ ] Connect frontend to deployed contract via Midnight DApp Connector
+- [ ] Wire witnesses to real wallet-history inputs (currently mocked in `frontend/src/mockCreditData.ts`) — needs a live Solana/EVM indexer, out of scope for the hackathon demo
+- [ ] Deploy to Preprod, then mainnet if time allows — needs a funded wallet seed (get tNIGHT from the faucet) and Midnight RPC config in `scripts/deploy.ts`
+- [ ] Connect frontend to deployed contract via Midnight DApp Connector — depends on the Preprod deploy above
