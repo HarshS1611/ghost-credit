@@ -1,0 +1,27 @@
+import { useState } from "react";
+import BorrowerView from "./BorrowerView";
+import LenderView from "./LenderView";
+import type { BorrowerFixture } from "./mockCreditData";
+import "./styles.css";
+
+export default function App() {
+  const [approvedLoan, setApprovedLoan] = useState<{
+    borrower: BorrowerFixture;
+    amount: number;
+  } | null>(null);
+
+  return (
+    <div className="app">
+      <header>
+        <h1>Ghost Credit</h1>
+        <p className="dim">Private, verifiable credit scores for undercollateralized DeFi lending — built on Midnight.</p>
+      </header>
+
+      <BorrowerView
+        onLoanApproved={(borrower, amount) => setApprovedLoan({ borrower, amount })}
+      />
+
+      <LenderView approvedLoan={approvedLoan} />
+    </div>
+  );
+}

@@ -1,0 +1,18 @@
+{
+  "name": "ghost-credit-contract",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "compile:compact": "compact compile src/ghost-credit.compact src/managed/ghost-credit",
+    "compile:typescript": "tsc",
+    "clean": "rm -rf dist src/managed",
+    "build": "npm run clean && npm run compile:compact && npm run compile:typescript && cp -Rf ./src/managed ./dist/managed && cp ./src/ghost-credit.compact ./dist"
+  },
+  "dependencies": {
+    "@midnight-ntwrk/compact-runtime": "^0.16.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}
