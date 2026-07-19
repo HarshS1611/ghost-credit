@@ -72,13 +72,17 @@ ghost-credit/
    cd frontend && npm run dev
    ```
 
-## Demo script (3 min)
+## How it works
 
-1. Show a normal DeFi lending dashboard leaking full wallet history (10s).
-2. Borrower connects wallet in Ghost Credit → generates proof locally (20s).
-3. Lender view: only a green checkmark + approved loan amount, nothing else (20s).
-4. Submit `requestLoan` on-chain, show the tx hash on the Midnight explorer (30s).
-5. One sentence: "This is the only reason DeFi is stuck at 150% collateral."
+- **Identity**: a borrower is identified on-chain by `persistentHash("ghost-credit:user:pk:v1" || secretKey)`,
+  a hash of a witness-held secret — never a wallet address, and never `ownPublicKey()`
+  (which is prover-claimed and unverifiable, so it can't gate access).
+- **Credit check**: `requestLoan` takes a `CreditProfile` (score, liquidation count,
+  account age) entirely from a witness. The circuit asserts it clears the lender's
+  bar; the profile itself never leaves the prover.
+- **What lands on the ledger**: only the borrower's identity hash and the loan
+  amount, in the `loans` map. `getLoanStatus` lets anyone check whether a given
+  identity hash holds a loan and for how much — that's the entire public surface.
 
 ## Status
 

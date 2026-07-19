@@ -1,10 +1,5 @@
-// Deploys the compiled Ghost Credit contract using the MidnightProviders
-// configuration described in the Midnight docs guide:
+// Requires wallet seed + MidnightProviders config, see
 // https://docs.midnight.network/guides (Configure MidnightProviders)
-//
-// This is a skeleton — fill in wallet seed / network config before running.
-// It intentionally is not wired to a live network here since this sandbox
-// has no route to Midnight's RPC endpoints.
 
 import { deployContract } from "@midnight-ntwrk/midnight-js-contracts";
 import * as GhostCredit from "../contracts/src/index.js";
@@ -14,7 +9,7 @@ async function main() {
   // TODO: load a real wallet seed from env, and real providers per the
   // "Configure MidnightProviders" guide.
   const initialPrivateState = createGhostCreditPrivateState(
-    new Uint8Array(32), // placeholder secret key
+    new Uint8Array(32),
     { score: 0, liquidationCount: 0, accountAgeMonths: 0 }
   );
 

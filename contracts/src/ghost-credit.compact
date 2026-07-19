@@ -2,30 +2,18 @@ pragma language_version >= 0.16;
 
 import CompactStandardLibrary;
 
-// Private credit profile, supplied entirely by a witness. None of these
-// fields ever appear on the public ledger — only the pass/fail result of
-// the assertions below does.
 struct CreditProfile {
   score: Uint<16>;
   liquidationCount: Uint<16>;
   accountAgeMonths: Uint<16>;
 }
 
-// Witnesses: callbacks implemented off-chain in TypeScript (see witnesses.ts).
-// localSecretKey identifies the caller without revealing their wallet address.
-// creditData supplies the private inputs computed from the borrower's
-// off-chain wallet history.
 witness localSecretKey(): Bytes<32>;
 witness creditData(): CreditProfile;
 
-// Public ledger state: which borrowers (identified by a public-key hash,
-// never a wallet address) currently hold an approved loan, and how much.
 export ledger loans: Map<Bytes<32>, Uint<64>>;
 export ledger totalLoansIssued: Counter;
 
-// Borrower requests a loan. The circuit proves the private CreditProfile
-// clears the lender's bar without disclosing the score, liquidation count,
-// or account age themselves.
 export circuit requestLoan(loanAmount: Uint<64>, minScore: Uint<16>): [] {
   const profile = creditData();
 
@@ -40,23 +28,18 @@ export circuit requestLoan(loanAmount: Uint<64>, minScore: Uint<16>): [] {
   totalLoansIssued.increment(1);
 }
 
-// Borrower repays and clears their loan record.
 export circuit repayLoan(): [] {
   const borrower = disclose(borrowerPublicKey());
   assert(loans.member(borrower), "No active loan to repay");
   loans.remove(borrower);
 }
 
-// Derives the borrower's on-chain identity from their witness-held secret.
-// Never uses ownPublicKey(): that value is prover-claimed and not
-// cross-checked against the wallet that signed the transaction, so it
-// cannot be trusted for identity or access-control decisions.
+// Not ownPublicKey(): that value is prover-claimed and never checked
+// against the transaction signer, so it can't be trusted for identity.
 circuit borrowerPublicKey(): Bytes<32> {
   return persistentHash<[Bytes<23>, Bytes<32>]>(["ghost-credit:user:pk:v1", localSecretKey()]);
 }
 
-// Anyone can check whether a given borrower currently holds a loan and for
-// how much — this is the only thing a lender ever sees.
 export circuit getLoanStatus(borrower: Bytes<32>): Uint<64> {
   const target = disclose(borrower);
   if (loans.member(target)) {

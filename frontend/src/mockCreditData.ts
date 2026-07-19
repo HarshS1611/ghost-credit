@@ -1,8 +1,6 @@
-// Seeded fixture standing in for a real multi-chain wallet-history indexer.
-// In the full version, this is computed from the borrower's Solana/EVM
-// transaction history (repayments, liquidations, account age, asset mix)
-// and fed into the `creditData` witness. For the demo, it lets us show the
-// full flow without depending on live indexer infrastructure.
+// Stands in for a live wallet-history indexer that would compute these
+// fields from the borrower's on-chain transaction history and feed them
+// into the `creditData` witness.
 
 export type WalletHistoryEntry = {
   label: string;
@@ -15,8 +13,6 @@ export type BorrowerFixture = {
   score: number;
   liquidationCount: number;
   accountAgeMonths: number;
-  // What a normal, non-private DeFi dashboard would show a lender today —
-  // this is the data Ghost Credit keeps off the ledger entirely.
   exposedHistory: WalletHistoryEntry[];
 };
 

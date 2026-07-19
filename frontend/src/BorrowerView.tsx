@@ -14,10 +14,8 @@ export default function BorrowerView({ onLoanApproved }: Props) {
 
   const borrower = borrowers.find((b) => b.id === selectedId)!;
 
-  // Stands in for calling the compiled `requestLoan` circuit and generating
-  // a real ZK proof via the local proof server. The actual call, once the
-  // contract is compiled and deployed, looks like:
-  //   await ghostCreditContract.callTx.requestLoan(loanAmount, MIN_SCORE)
+  // Stands in for ghostCreditContract.callTx.requestLoan(loanAmount, MIN_SCORE)
+  // against the deployed contract and local proof server.
   const runProof = async () => {
     setProving(true);
     setResult("idle");
