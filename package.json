@@ -14,7 +14,8 @@
     "test:preprod": "MIDNIGHT_NETWORK=preprod npm run test",
     "env:up": "docker compose up -d --wait",
     "env:down": "docker compose down",
-    "proof:up": "docker compose up -d --wait proof-server"
+    "proof:up": "docker compose up -d --wait proof-server",
+    "dev:api": "MIDNIGHT_NETWORK=local tsx src/server.ts"
   },
   "dependencies": {
     "@midnight-ntwrk/midnight-js-protocol": "4.1.1",
@@ -36,6 +37,7 @@
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@types/ws": "^8.5.9",
+    "tsx": "^4.19.0",
     "typescript": "^5.7.0",
     "vitest": "^4.1.0"
   },

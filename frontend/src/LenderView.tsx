@@ -1,7 +1,7 @@
 import type { BorrowerFixture } from "./mockCreditData";
 
 type Props = {
-  approvedLoan: { borrower: BorrowerFixture; amount: number } | null;
+  approvedLoan: { borrower: BorrowerFixture; amount: number; contractAddress: string } | null;
 };
 
 export default function LenderView({ approvedLoan }: Props) {
@@ -31,6 +31,9 @@ export default function LenderView({ approvedLoan }: Props) {
             <div className="checkmark">✓</div>
             <p>Loan approved: {approvedLoan.amount} USDC</p>
             <p className="dim">Score, history, and wallet: not disclosed</p>
+            <p className="dim" title={approvedLoan.contractAddress}>
+              On-chain at {approvedLoan.contractAddress.slice(0, 16)}…
+            </p>
           </div>
         ) : (
           <p className="dim">Waiting for a loan request...</p>

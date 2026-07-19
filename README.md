@@ -25,10 +25,12 @@ ghost-credit/
 │   ├── config.ts                 # Network config: local devnet / preview / preprod
 │   ├── providers.ts               # MidnightProviders wiring (indexer, proof, zk config)
 │   ├── wallet.ts                   # Wallet provider (seed or mnemonic)
+│   ├── server.ts                   # Dev API: deploys once, exposes circuits over HTTP
 │   └── test/ghost-credit.test.ts    # Deploys the contract and exercises every circuit
 ├── frontend/                   # Minimal 2-screen React app (borrower / lender view)
 │   └── src/
 │       ├── App.tsx, BorrowerView.tsx, LenderView.tsx
+│       ├── ghostCreditApi.ts      # Client for src/server.ts
 │       └── mockCreditData.ts      # Seeded wallet-history fixture for the demo
 ├── package.json                # Root workspace: deploy/test harness
 └── docker-compose.yml           # Local devnet: node + indexer + proof server
@@ -71,10 +73,19 @@ ghost-credit/
    npm run test:preprod
    ```
 
-6. Run the frontend:
+6. Run the demo frontend against a real deployed contract (three terminals):
    ```
+   npm run env:up        # local devnet: node + indexer + proof server
+   npm run dev:api        # deploys the contract, serves its circuits over HTTP on :8787
    cd frontend && npm run dev
    ```
+   The Borrower panel calls the real `requestLoan`/`repayLoan` circuits through
+   `src/server.ts` and generates an actual ZK proof per request (a few seconds
+   — that's the proof server, not a fake delay). `src/server.ts` exists because
+   proof generation and signing normally happen in-browser via a wallet
+   extension (the Midnight DApp Connector); this bridge reuses the same
+   deploy/interact code the tests use so the demo doesn't depend on having a
+   Midnight wallet extension installed.
 
 ## How it works
 
@@ -92,6 +103,7 @@ ghost-credit/
 
 - [x] Compile `ghost-credit.compact` with real toolchain and fix any compiler errors
 - [x] Deploy and exercise every circuit (`requestLoan`, `repayLoan`, `getLoanStatus`) against a real local Midnight devnet with actual ZK proofs — `npm run test:local`
+- [x] Frontend calls the real deployed contract (approve, reject, repay all verified against local devnet) via the `src/server.ts` dev bridge
 - [ ] Deploy to Preprod — script is wired (`npm run test:preprod`), just needs a funded wallet seed (get tNIGHT from the faucet)
 - [ ] Wire witnesses to real wallet-history inputs (currently mocked in `frontend/src/mockCreditData.ts`) — needs a live Solana/EVM indexer, out of scope for the hackathon demo
-- [ ] Connect frontend to deployed contract via Midnight DApp Connector — depends on the Preprod deploy above
+- [ ] Real browser wallet connection via the Midnight DApp Connector (Lace) — `src/server.ts` is a dev-only stand-in; swapping it for `@midnight-ntwrk/dapp-connector-api` so proof generation happens client-side is the last step for a production submission

@@ -8,6 +8,7 @@ export default function App() {
   const [approvedLoan, setApprovedLoan] = useState<{
     borrower: BorrowerFixture;
     amount: number;
+    contractAddress: string;
   } | null>(null);
 
   return (
@@ -18,7 +19,7 @@ export default function App() {
       </header>
 
       <BorrowerView
-        onLoanApproved={(borrower, amount) => setApprovedLoan({ borrower, amount })}
+        onLoanApproved={(borrower, amount, contractAddress) => setApprovedLoan({ borrower, amount, contractAddress })}
       />
 
       <LenderView approvedLoan={approvedLoan} />
