@@ -3,4 +3,8 @@ dist/
 contracts/src/managed/
 frontend/dist/
 .env
+.env.preprod
+.env.preview
 .DS_Store
+logs/
+midnight-level-db/

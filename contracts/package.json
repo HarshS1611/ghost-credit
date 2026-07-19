@@ -10,7 +10,8 @@
     "build": "npm run clean && npm run compile:compact && npm run compile:typescript && cp -Rf ./src/managed ./dist/managed && cp ./src/ghost-credit.compact ./dist"
   },
   "dependencies": {
-    "@midnight-ntwrk/compact-runtime": "^0.16.0"
+    "@midnight-ntwrk/compact-runtime": "^0.16.0",
+    "@midnight-ntwrk/midnight-js-protocol": "4.1.1"
   },
   "devDependencies": {
     "typescript": "^5.4.0"
