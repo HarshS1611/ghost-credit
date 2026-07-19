@@ -1,9 +1,7 @@
-// Local dev API bridging the frontend to a real deployed Ghost Credit
-// contract. This exists because the sandbox this was built in has no
-// browser to test a Lace wallet extension against — in production, proof
-// generation and signing happen in the browser via the Midnight DApp
-// Connector, not on a server. This bridge still performs the real thing:
-// actual circuit calls, actual ZK proofs, against a live local devnet.
+// Dev-only bridge: the production path is proof generation and signing in
+// the browser via the Midnight DApp Connector, not a server. This exists
+// because that needs a wallet extension this environment can't test against
+// — it still does real circuit calls and real ZK proofs against local devnet.
 
 import { createHash, randomBytes } from "node:crypto";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";

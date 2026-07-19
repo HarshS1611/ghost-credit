@@ -15,7 +15,8 @@
     "env:up": "docker compose up -d --wait",
     "env:down": "docker compose down",
     "proof:up": "docker compose up -d --wait proof-server",
-    "dev:api": "MIDNIGHT_NETWORK=local tsx src/server.ts"
+    "dev:api": "MIDNIGHT_NETWORK=local tsx src/server.ts",
+    "register-dust:preprod": "MIDNIGHT_NETWORK=preprod tsx --env-file=.env.preprod src/register-dust.ts"
   },
   "dependencies": {
     "@midnight-ntwrk/midnight-js-protocol": "4.1.1",

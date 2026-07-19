@@ -1,10 +1,23 @@
+import { useState } from "react";
 import type { BorrowerFixture } from "./mockCreditData";
 
 type Props = {
   approvedLoan: { borrower: BorrowerFixture; amount: number; contractAddress: string } | null;
+  onRepay: () => Promise<void>;
 };
 
-export default function LenderView({ approvedLoan }: Props) {
+export default function LenderView({ approvedLoan, onRepay }: Props) {
+  const [repaying, setRepaying] = useState(false);
+
+  const handleRepay = async () => {
+    setRepaying(true);
+    try {
+      await onRepay();
+    } finally {
+      setRepaying(false);
+    }
+  };
+
   return (
     <div className="panel side-by-side">
       <div>
@@ -34,6 +47,9 @@ export default function LenderView({ approvedLoan }: Props) {
             <p className="dim" title={approvedLoan.contractAddress}>
               On-chain at {approvedLoan.contractAddress.slice(0, 16)}…
             </p>
+            <button onClick={handleRepay} disabled={repaying}>
+              {repaying ? "Submitting repayment..." : "Repay loan"}
+            </button>
           </div>
         ) : (
           <p className="dim">Waiting for a loan request...</p>

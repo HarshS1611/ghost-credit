@@ -2,6 +2,7 @@ import { useState } from "react";
 import BorrowerView from "./BorrowerView";
 import LenderView from "./LenderView";
 import type { BorrowerFixture } from "./mockCreditData";
+import { repayLoan } from "./ghostCreditApi";
 import "./styles.css";
 
 export default function App() {
@@ -10,6 +11,12 @@ export default function App() {
     amount: number;
     contractAddress: string;
   } | null>(null);
+
+  const handleRepay = async () => {
+    if (!approvedLoan) return;
+    await repayLoan(approvedLoan.borrower.id);
+    setApprovedLoan(null);
+  };
 
   return (
     <div className="app">
@@ -22,7 +29,7 @@ export default function App() {
         onLoanApproved={(borrower, amount, contractAddress) => setApprovedLoan({ borrower, amount, contractAddress })}
       />
 
-      <LenderView approvedLoan={approvedLoan} />
+      <LenderView approvedLoan={approvedLoan} onRepay={handleRepay} />
     </div>
   );
 }
